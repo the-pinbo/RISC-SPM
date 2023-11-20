@@ -72,56 +72,41 @@ module RISC_SPM_TB ();
         // opcode_src_dest
         // NOP
         M2.M2_SRAM.memory[0] = 8'b0000_00_00;		
-        // Read 130 to R2
-        M2.M2_SRAM.memory[1] = 8'b0101_00_10;		
+        // Read 130 to R0
+        M2.M2_SRAM.memory[1] = 8'b0101_00_00;		
         M2.M2_SRAM.memory[2] = 130; // 2
-        // Read 131 to R3
-        M2.M2_SRAM.memory[3] = 8'b0101_00_11;		
-        M2.M2_SRAM.memory[4] = 131; // 0
-        // Read 128 to R1
-        M2.M2_SRAM.memory[5] = 8'b0101_00_01;		
+        // Read 131 to R1
+        M2.M2_SRAM.memory[3] = 8'b0101_00_01;		
+        M2.M2_SRAM.memory[4] = 131; // 2
+        // Read 128 to R2
+        M2.M2_SRAM.memory[5] = 8'b0101_00_10;		
         M2.M2_SRAM.memory[6] = 128; // 6
-        // Read 129 to R0
-        M2.M2_SRAM.memory[7] = 8'b0101_00_00;		
+        // Read 129 to R3
+        M2.M2_SRAM.memory[7] = 8'b0101_00_11;		
         M2.M2_SRAM.memory[8] = 129; // 1
-        /* R0 : 1
-           R1 : 6
-           R2 : 2 
-           R3 : 0 
+        /* R0 : 2
+           R1 : 2
+           R2 : 6 
+           R3 : 1 
         */
-        // Sub R1-R0 to R1
-        // R1 : 5 <= 6-1
-        M2.M2_SRAM.memory[9] = 8'b0010_00_01;		
+
+        // R2 == R3
+        M2.M2_SRAM.memory[9]  =	8'b1001_10_11;
+        // R0 == R3
+        M2.M2_SRAM.memory[10] = 8'b1001_00_11;
+        // R0 == R1
+        M2.M2_SRAM.memory[11] = 8'b1001_00_01;
         // BRZ
-        M2.M2_SRAM.memory[10] = 8'b1000_00_00;
+        M2.M2_SRAM.memory[12] = 8'b1000_00_00;
         // Holds address for BRZ 
-        M2.M2_SRAM.memory[11] = 134;				
-
-        /* R0 : 1
-           R1 : 6
-           R2 : 2 
-           R3 : 0 
-        */
-        // Add R2+R3 to R3
-        // R3 : 2 <= 0+2
-        M2.M2_SRAM.memory[12] = 8'b0001_10_11;
-        // BR (jumps to 9 if true)
-        M2.M2_SRAM.memory[13] = 8'b0111_00_11;		
-        M2.M2_SRAM.memory[14] = 140;
-
-        //M2.M2_SRAM.memory[13] = 8'b0110_11_00;		// WR R3 to memory
-        //M2.M2_SRAM.memory[14] = 131;
-        //M2.M2_SRAM.memory[15] = 8'b0110_01_00;		// WR R1 to memory
-        //M2.M2_SRAM.memory[16] = 128;
+        M2.M2_SRAM.memory[13] = 134;				
 
         // Load data
         M2.M2_SRAM.memory[128] = 6;
         M2.M2_SRAM.memory[129] = 1;
         M2.M2_SRAM.memory[130] = 2;
-        M2.M2_SRAM.memory[131] = 0;
+        M2.M2_SRAM.memory[131] = 2;
         M2.M2_SRAM.memory[134] = 139;
-        //M2.M2_SRAM.memory[135] = 0;
         M2.M2_SRAM.memory[139] = 8'b1111_00_00;		// HALT
-        M2.M2_SRAM.memory[140] = 9;				//  Recycle
     end
 endmodule

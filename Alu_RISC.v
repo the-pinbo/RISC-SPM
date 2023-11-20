@@ -19,7 +19,8 @@ module Alu_RISC #(
     RD  	= 4'b0101,
     WR		= 4'b0110,
     BR		= 4'b0111,
-    BRZ 	= 4'b1000
+    BRZ 	= 4'b1000,
+    EQZ     = 4'b1001
 ) (
     output alu_zero_flag,
     output reg[word_size-1: 0] alu_out,
@@ -30,11 +31,12 @@ module Alu_RISC #(
     assign  alu_zero_flag = ~|alu_out;
     always @ (sel or data_1 or data_2)  
         case  (sel)
-            NOP:	alu_out = 0;
-            ADD:	alu_out = data_1 + data_2;  // Reg_Y + Bus_1
-            SUB:	alu_out = data_2 - data_1;
-            AND:	alu_out = data_1 & data_2;
-            NOT:	alu_out = ~ data_2;	 // Gets data from Bus_1
+            NOP:	    alu_out = 0;
+            ADD:	    alu_out = data_1 + data_2;  // Reg_Y + Bus_1
+            SUB, EQZ:	alu_out = data_2 - data_1;
+            AND:	    alu_out = data_1 & data_2;
+            NOT:	    alu_out = ~ data_2;	 // Gets data from Bus_1
+            
         default: 	alu_out = 0;
         endcase 
 endmodule

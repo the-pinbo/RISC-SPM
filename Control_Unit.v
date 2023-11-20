@@ -31,7 +31,9 @@ module Control_Unit #(
     // Short Instructions
     parameter NOP = 0, ADD = 1, SUB = 2, AND = 3, NOT = 4,
     // Long Instructions
-    parameter RD  = 5, WR =  6,  BR =  7, BRZ = 8,  
+    parameter RD  = 5, WR =  6,  BR =  7, BRZ = 8,
+    // Newly added Instructions 
+    parameter EQZ = 9,  
     // Source and Destination Codes  
     parameter R0 = 0, R1 = 1, R2 = 2, R3 = 3
 ) (
@@ -134,7 +136,7 @@ module Control_Unit #(
                 // No Operation
                 NOP: next_state = S_fet1;
                 // ADD, SUB, AND
-                ADD, SUB, AND: begin
+                ADD, SUB, AND, EQZ: begin
                     next_state = S_ex1;
                     Sel_Bus_1 = 1;
                     Load_Reg_Y = 1;
