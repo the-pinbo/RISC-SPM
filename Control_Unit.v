@@ -26,14 +26,17 @@ module Control_Unit #(
     // load the destination register with the address given in S_br1
     S_br2 = 10,
     // default to trap invalid instructions 
-    S_halt = 11,  
+    S_halt = 11,
+    // *Newly added state*
+    // load the destination register with the literal and increment the PC
+    S_ld = 12,  
     // Opcodes
     // Short Instructions
     parameter NOP = 0, ADD = 1, SUB = 2, AND = 3, NOT = 4,
     // Long Instructions
     parameter RD  = 5, WR =  6,  BR =  7, BRZ = 8,
     // Newly added Instructions 
-    parameter EQZ = 9,  
+    parameter EQZ = 9,  LDR = 10,
     // Source and Destination Codes  
     parameter R0 = 0, R1 = 1, R2 = 2, R3 = 3
 ) (
@@ -197,6 +200,11 @@ module Control_Unit #(
                         next_state = S_fet1; 
                         Inc_PC = 1; 
                     end
+                // dest <= 8'b????_????  
+                LDR: begin
+                    next_state = S_ld;
+                    Sel_PC = 1; Sel_Bus_1 = 1; Load_Add_R = 1; 
+                end 
                     default : next_state = S_halt;
             endcase // (opcode)
 
@@ -264,6 +272,19 @@ module Control_Unit #(
         end
 
         S_halt: next_state = S_halt;
+
+        S_ld: begin 
+            next_state = S_fet1;
+            Sel_Mem = 1;
+            Inc_PC = 1;
+            case(dest) 
+                R0: Load_R0 = 1; 
+                R1: Load_R1 = 1; 
+                R2: Load_R2 = 1; 
+                R3: Load_R3 = 1; 
+                default : err_flag = 1;
+            endcase  
+        end
 
         default: next_state = S_idle;
 

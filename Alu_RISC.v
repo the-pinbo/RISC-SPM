@@ -20,7 +20,8 @@ module Alu_RISC #(
     WR		= 4'b0110,
     BR		= 4'b0111,
     BRZ 	= 4'b1000,
-    EQZ     = 4'b1001
+    EQZ     = 4'b1001,
+    LDR     = 4'b1010
 ) (
     output alu_zero_flag,
     output reg[word_size-1: 0] alu_out,
